@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+  <div class="card mb-4">
+    <div class="card-body">
+      <h1 style="text-align:center">Users</h1>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="container">
+
+<form method="get" action="">
+  <div class="form-row align-items-center">
+    <div class="col-sm-4 my-1">
+      <label class="sr-only" for="q">Username:</label>
+      <input type="text" class="form-control" name="q" id="q" placeholder="Username">
+    </div>
+    <div class="col-sm-4 my-1">
+      <button type="submit" class="btn btn-primary">Apply</button>
+    </div>
+  </div>
+</form>
+
+  <div class="row mt-n5">
+                    {% for user in object_list %}
+                    <div class="col-md-6 col-lg-4 mt-5 wow fadeInUp" data-wow-delay=".2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+                        <div class="blog-grid">
+                            <div class="blog-grid-text p-4">
+                                <h3 class="h5 mb-3"><a href="{% url 'user-detail' user.userId %}">{{ user.username }}</a></h3>
+                              </div>
+
+                            </div>
+                        </div>
+        {% empty %}
+          <h2>No posts found</h2>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

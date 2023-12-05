@@ -1,0 +1,20 @@
+
+<!-- templates/signup.html -->
+{% extends 'base.html' %}
+
+{% block title %}Change{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card mb-4">
+    <div class="card-body">
+<h2>Change</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_table }}
+  <button type="submit" class="btn btn-primary mt-3">Change</button>
+</form>
+    </div>
+  </div>
+</div>
+{% endblock %}

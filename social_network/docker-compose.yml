@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    command: sh -c "python manage.py migrate && python manage.py create_test_data && python manage.py runserver 0.0.0.0:8000"
+    networks:
+      - mynetwork
+
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/var/lib/mongodb/data/
+    networks:
+      - mynetwork
+
+
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass password
+    networks:
+      - mynetwork
+
+
+networks:
+  mynetwork:
+
+volumes:
+  mongodb-data:

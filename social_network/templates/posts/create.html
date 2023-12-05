@@ -1,0 +1,19 @@
+<!-- templates/signup.html -->
+{% extends 'base.html' %}
+
+{% block title %}Create post{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card mb-4">
+    <div class="card-body">
+      <h2>Create post</h2>
+      <form method="post">
+      {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary mt-3">Create</button>
+</form>
+    </div>
+  </div>
+</div>
+{% endblock %}

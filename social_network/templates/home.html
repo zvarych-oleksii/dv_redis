@@ -1,0 +1,40 @@
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container py-5">
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3>Hi {{user.username}}</h3>
+    </div>
+  </div>
+</div>
+{% endif %}
+<div class='container'>
+<div class="row mt-n4">
+                    {% for post in posts %}
+                    <div class="col-md-6 col-lg-4 mt-5 wow fadeInUp" data-wow-delay=".2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+                        <div class="blog-grid">
+                            <div class="blog-grid-text p-4">
+                                <h3 class="h5 mb-3"><a href="{% url 'post-detail' post.postId %}">{{ post.title }}</a></h3>
+                                <div class="meta meta-style2">
+                                    <ul>
+                                      <li><a><i class="fas fa-calendar-alt"></i>{{post.created_date}}</a></li>
+                                      <li><a><i class="fas fa-user"></i>{{post.authors}}</a></li>
+                                      <li><a><i class="fas fa-comments"></i>{{post.views}}</a></li>
+                                    </ul>
+                                </div>
+                              </div>
+
+                            </div>
+                        </div>
+        {% empty %}
+          <h2>No posts found</h2>
+        {% endfor %}
+    </div>
+</div>
+</div>
+{% endblock %}

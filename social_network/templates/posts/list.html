@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card mb-4">
+    <div class="card-body">
+      <h1 style="text-align:center">Posts</h1>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+
+<form method="get" action="">
+  <div class="form-row align-items-center">
+    <div class="col-sm-4 my-1">
+      <label class="sr-only" for="q">Title:</label>
+      <input type="text" class="form-control" name="q" id="q" placeholder="Title">
+    </div>
+    <div class="col-sm-4 my-1">
+      <label class="mr-sm-2" for="orderby">Sorting:</label>
+      <select class="custom-select mr-sm-2" name="orderby" id="orderby">
+        <option value="created_date">Created Date</option>
+        <option value="-created_date">-Created Date</option>
+        <option value="views">Views</option>
+        <option value="-views">-Views</option>
+      </select>
+    </div>
+    <div class="col-sm-4 my-1">
+      <button type="submit" class="btn btn-primary">Apply</button>
+    </div>
+  </div>
+</form>
+
+  <div class="row mt-n5">
+                    {% for post in object_list %}
+                    <div class="col-md-6 col-lg-4 mt-5 wow fadeInUp" data-wow-delay=".2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+                        <div class="blog-grid">
+                            <div class="blog-grid-text p-4">
+                                <h3 class="h5 mb-3"><a href="{% url 'post-detail' post.postId %}">{{ post.title }}</a></h3>
+                                <div class="meta meta-style2">
+                                    <ul>
+                                      <li><a><i class="fas fa-calendar-alt"></i>{{post.created_date}}</a></li>
+                                      <li><a><i class="fas fa-user"></i>{{post.authors}}</a></li>
+                                      <li><a><i class="fas fa-comments"></i>{{post.views}}</a></li>
+                                    </ul>
+                                </div>
+                              </div>
+
+                            </div>
+                        </div>
+        {% empty %}
+          <h2>No posts found</h2>
+        {% endfor %}
+    </div>
+</div>
+<div class="row mt-6 wow fadeInUp" data-wow-delay=".6s" style="visibility: visible; animation-delay: 0.6s; animation-name: fadeInUp;">
+    <div class="col-12">
+        <div class="pagination text-small text-uppercase text-extra-dark-gray">
+            <ul>
+                {% if page_obj.has_previous %}
+                    <li>
+                        <a href="?page={{ page_obj.previous_page_number }}"><i class="fas fa-long-arrow-alt-left me-1 d-none d-sm-inline-block"></i> Prev</a>
+                    </li>
+                {% endif %}
+                <li>
+                    <a href="?page={{ page_obj.next_page_number }}">Next <i class="fas fa-long-arrow-alt-right ms-1 d-none d-sm-inline-block"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

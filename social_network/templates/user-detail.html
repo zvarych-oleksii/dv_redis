@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;">
+            <h5 class="my-3">{{object.username}}</h5>
+            <div class="d-flex justify-content-center mb-2">
+              {% if request.user.is_authenticated %}
+                {% if request.user != object %}
+                  {% if not friend_request_exists %}
+                    <form method="post" action="{% url 'send-friend-request' object.userId %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Follow</button>
+                    </form>
+                  {% else %}
+                    <p>Friend request sent!</p>
+                  {% endif %}
+                {% elif request.user == object %}
+                <form action="{% url 'user-change' object.userId %}">
+                    <button type="submit" class="btn btn-primary">Change profile</button>
+                </form>
+                {% endif %}
+            {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Full Name</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{object.first_name}} {{object.last_name}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{object.email}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    {% if request.user.is_authenticated and request.user == object %}
+      {% if friend_request_exists %}
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card mb-4 mb-md-0">
+              <div class="card-body">
+                <p class="mb-4"> Friends:
+                </p>
+                {% for friend in friends %}
+                      {% if friend.sender_username == object.username %} 
+                      <p class="mb-1" ><a href="{% url 'user-detail' friend.receiverId%}">{{ friend.receiver_username }}</a></p>
+                      {% elif friend.receiver_username == object.username %}
+                      <p class="mb-1" ><a href="{% url 'user-detail' friend.senderId%}">{{ friend.sender_username }}</a></p>
+                      {% endif %}
+                {% endfor %}
+                </div>
+              </div>
+            </div>
+          <div class="col-md-6">
+            <div class="card mb-4 mb-md-0">
+              <div class="card-body">
+                <p class="mb-4"> Requests:
+                </p>
+
+              {% for request in requests %}
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p class="mb-1">{{ request.sender_username }}</p>
+              <form method="post" action="{% url 'respond-to-friend-request' request.requestId %}">
+                {% csrf_token %}
+                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                  <button type="submit" class="btn btn-success" name="action" value="accept">Accept</button>
+                  <button type="submit" class="btn btn-danger" name="action" value="reject">Reject</button>
+                </div>
+              </form>
+              </div>
+              {% endfor %}
+
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    <div style='margin-top:20px' class="card mb-4">
+          <div class="card-body">
+            {% for post in posts %}
+            <div class="row">
+              <div class="col-sm-9">
+                <p class="text-muted mb-0"><a href='{% url "post-detail" post.postId %}'>{{post.title}}</a></p>
+              </div>
+            </div>
+            <hr>
+            {% endfor %}
+
+          </div>
+        </div>
+    </div>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}
